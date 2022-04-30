@@ -62,7 +62,7 @@ class MyHomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, Routes.second,
                           arguments: SecondPageArguments(
-                              "MyCustom Title", "My Message"));
+                              "Game of Thrones Characters", ""));
                     },
                     child: Text("BTN")),
               ],
