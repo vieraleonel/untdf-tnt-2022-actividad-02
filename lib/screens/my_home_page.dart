@@ -76,7 +76,11 @@ class MyHomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            const CardRowItem(),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.characters);
+                },
+                child: Text("characters")),
             const CardRowItem(),
             const CardRowItem(),
           ],

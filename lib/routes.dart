@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ejemplo/screens/characters_page.dart';
 import 'package:ejemplo/screens/my_home_page.dart';
 import 'package:ejemplo/screens/second_page.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 class Routes {
   static const String home = '/';
   static const String second = '/second';
+  static const String characters = '/characters';
 }
 
 Route routes(RouteSettings settings) {
@@ -24,6 +26,10 @@ Route routes(RouteSettings settings) {
                 message: args.message,
               ),
           settings: settings);
+
+    case Routes.characters:
+      return MaterialPageRoute(
+          builder: (_) => CharactersPage(), settings: settings);
 
     default:
       return MaterialPageRoute(
