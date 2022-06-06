@@ -26,9 +26,6 @@ class CharactersCubit extends Cubit<CharactersState> {
   }
 
   void search(String value) {
-    print('🐛');
-    print(state.items);
-    print('🐛');
     emit(CharactersSearched(items: state.items, search: value));
   }
 }

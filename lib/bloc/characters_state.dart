@@ -7,16 +7,11 @@ class CharactersState extends Equatable {
   final List<Character> items;
   final String search;
 
-  List<Character> get filteredItems {
-    print(items);
-    print(search);
-
-    return items
-        .where((element) =>
-            search == '' ||
-            element.fullName.toLowerCase().contains(search.toLowerCase()))
-        .toList();
-  }
+  List<Character> get filteredItems => items
+      .where((character) =>
+          search == '' ||
+          character.fullName.toLowerCase().contains(search.toLowerCase()))
+      .toList();
 
   int get count => filteredItems.length;
 
