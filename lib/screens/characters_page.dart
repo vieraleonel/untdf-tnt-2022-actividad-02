@@ -1,5 +1,7 @@
 import 'package:ejemplo/bloc/characters_state.dart';
 import 'package:ejemplo/bloc/charactes_cubit.dart';
+import 'package:ejemplo/data/characters_persistence_shared_preferences.dart';
+import 'package:ejemplo/data/characters_persistence_sqllite.dart';
 import 'package:ejemplo/data/characters_service.dart';
 import 'package:ejemplo/data/models/character.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,8 @@ class CharactersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (_) => CharactersCubit(CharacterService()),
+        create: (_) =>
+            CharactersCubit(CharacterService(), CharacterPersistenceSqlite()),
         child: Scaffold(
           appBar: AppBar(
               // The search area here

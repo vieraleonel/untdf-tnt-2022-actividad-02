@@ -1,25 +1,21 @@
-import 'dart:convert';
-
 import 'package:ejemplo/bloc/characters_state.dart';
+import 'package:ejemplo/data/characters_persistence.dart';
 import 'package:ejemplo/data/characters_service.dart';
 import 'package:ejemplo/data/models/character.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CharactersCubit extends Cubit<CharactersState> {
-  static const favoriteCharactersKey = 'favoriteCharacters';
-
   final CharacterService _service;
-  SharedPreferences? _prefs;
+  final CharacterPersistence _persistence;
 
-  CharactersCubit(this._service) : super(CharactersInitial()) {
+  CharactersCubit(this._service, this._persistence)
+      : super(CharactersInitial()) {
     _init();
   }
 
   Future<void> _init() async {
     emit(CharactersLoading());
-
-    _prefs = await SharedPreferences.getInstance();
 
     try {
       final items = await _service.getAll();
@@ -27,32 +23,19 @@ class CharactersCubit extends Cubit<CharactersState> {
       if (items.isEmpty) {
         emit(CharactersEmpty());
       } else {
-        emit(CharactersFetched(
-            items: items, favoriteCharacters: getFavsFromStorage()));
+        List<int> favs = await _persistence.getFavouriteCharacters();
+        emit(CharactersFetched(items: items, favoriteCharacters: favs));
       }
     } catch (e) {
       emit(CharactersFailed());
     }
   }
 
-  List<int> getFavsFromStorage() {
-    String? favsString = _prefs?.getString(favoriteCharactersKey);
-    if (favsString == null) {
-      return [];
-    } else {
-      return json.decode(favsString).cast<int>();
-    }
-  }
-
-  void setFavsToStorage(List<int> favs) {
-    _prefs?.setString(favoriteCharactersKey, json.encode(favs));
-  }
-
   void search(String value) {
     emit(state.copyWith(search: value));
   }
 
-  void toggleFav(Character character) {
+  void toggleFav(Character character) async {
     List<int> newFavs = state.favoriteCharacters?.toList() ?? [];
 
     if (newFavs.contains(character.id)) {
@@ -60,7 +43,7 @@ class CharactersCubit extends Cubit<CharactersState> {
     } else {
       newFavs.add(character.id);
     }
-    setFavsToStorage(newFavs);
+    _persistence.setFavouriteCharacters(newFavs);
     emit(state.copyWith(favoriteCharacters: newFavs));
   }
 
